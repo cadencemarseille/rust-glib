@@ -8,6 +8,7 @@
 
 #[link_args = "@GLIB_LIBS@"]
 extern {
+    fn g_string_equal(v: *::detail::string::GString, v2: *::detail::string::GString) -> ::gboolean;
     fn g_string_free(string: *mut ::detail::string::GString, free_segment: ::gboolean) -> *mut ::gchar;
     fn g_string_new_len(init: *::gchar, len: ::gssize) -> *mut ::detail::string::GString;
 }

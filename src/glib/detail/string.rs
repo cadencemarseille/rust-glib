@@ -12,6 +12,12 @@ pub struct GString {
     allocated_len: ::gsize
 }
 
+pub fn g_string_equal(v: *::detail::string::GString, v2: *::detail::string::GString) -> bool {
+    #[fixed_stack_segment]; #[inline(never)];
+    let res = unsafe { ::detail::native::string::g_string_equal(v, v2) };
+    if res == 0 { false } else { true }
+}
+
 pub fn g_string_free(string: *mut ::detail::string::GString, free_segment: bool) -> *mut ::gchar {
     #[fixed_stack_segment]; #[inline(never)];
     unsafe { ::detail::native::string::g_string_free(string, if free_segment { 1 } else { 0 }) }

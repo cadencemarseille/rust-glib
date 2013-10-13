@@ -47,3 +47,9 @@ impl Drop for String {
         self.ptr = ptr::null();
     }
 }
+
+impl Eq for String {
+    fn eq(&self, other: &String) -> bool {
+        ::detail::string::g_string_equal(self.ptr, other.ptr)
+    }
+}
