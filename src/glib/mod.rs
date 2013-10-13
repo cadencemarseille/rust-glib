@@ -13,6 +13,8 @@ use std::libc;
 
 pub use types::*;
 
+mod detail;
+pub mod string;
 pub mod types;
 
 pub type gint8 = i8;

@@ -7,3 +7,4 @@
 /build
 /lib
 /libtest~
+/src/glib/detail/native/string.rs
