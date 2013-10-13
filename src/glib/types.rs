@@ -21,3 +21,6 @@ pub type guint = libc::c_uint;
 
 pub type gfloat = libc::c_float;
 pub type gdouble = libc::c_double;
+
+pub type gpointer = *mut libc::c_void;
+pub type gconstpointer = *libc::c_void;
