@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-pub mod mem;
-mod native;
-pub mod strfuncs;
-pub mod string;
+pub fn g_free(mem: ::gpointer) {
+    #[fixed_stack_segment]; #[inline(never)];
+    unsafe { ::detail::native::mem::g_free(mem) }
+}

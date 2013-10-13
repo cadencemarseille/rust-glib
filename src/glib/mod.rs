@@ -14,6 +14,7 @@ use std::libc;
 pub use types::*;
 
 mod detail;
+pub mod strfuncs;
 pub mod string;
 pub mod types;
 

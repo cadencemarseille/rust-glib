@@ -7,4 +7,6 @@
 /build
 /lib
 /libtest~
+/src/glib/detail/native/mem.rs
+/src/glib/detail/native/strfuncs.rs
 /src/glib/detail/native/string.rs

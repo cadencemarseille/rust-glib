@@ -6,7 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-pub mod mem;
-mod native;
-pub mod strfuncs;
-pub mod string;
+#[link_args = "@GLIB_LIBS@"]
+extern {
+    fn g_strdup(str: *::gchar) -> *mut ::gchar;
+    fn g_strdupv(str_array: *mut *mut ::gchar) -> *mut *mut ::gchar;
+    fn g_strfreev(str_array: *mut *mut ::gchar);
+}
