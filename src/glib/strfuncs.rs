@@ -52,11 +52,11 @@ pub struct Strdupv {
 impl Strdupv {
     /// Creates a `Strdupv` that takes ownership of the given `NULL`-terminated array of
     /// allocated strings, as well as the allocated strings themselves. The `Strdupv` will
-    /// free each string up to the `NULL` terminator and free the array (via g_strfreev())
+    /// free each string up to the `NULL` terminator and free the array (all via g_strfreev())
     /// when destroyed.
     ///
     /// This static method is unsafe because (1) the given array must have been allocated;
-    /// (2) the given array must be `NULL` terminated; (3) each string in the array up to
+    /// (2) the given array must be `NULL`-terminated; (3) each string in the array up to
     /// the `NULL` terminator must have been allocated; and (4) it must be that only the
     /// `Strdupv` will free the array and each of the strings up to the `NULL` terminator.
     unsafe fn new(str_array: *mut *mut ::gchar) -> Strdupv {
@@ -84,7 +84,7 @@ impl Drop for Strdupv {
 /// Duplicates a nul-terminated string.
 ///
 /// This function is unsafe because the given string must be terminated with a nul character
-/// (`'\0'`).
+/// (`'\0'`) and each character through the nul terminator must be safe to access.
 pub unsafe fn strdup(str: *::gchar) -> Strdup {
     Strdup::new(::detail::strfuncs::g_strdup(str))
 }
