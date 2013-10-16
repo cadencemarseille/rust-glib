@@ -5,6 +5,7 @@
 /.rust
 /bin
 /build
+/doc
 /lib
 /libtest~
 /src/glib/detail/native/mem.rs

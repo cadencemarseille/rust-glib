@@ -18,18 +18,43 @@ impl Strdup {
     /// Creates a new `Strdup` that takes ownership of the given allocated string. The `Strdup`
     /// will free the string via g_free() when destroyed.
     ///
+    /// # Safety notes
     /// This static method is unsafe because the given string must have been allocated (such
     /// as by g_strdup()) and it must be that only the `Strdup` will free the memory.
-    unsafe fn new(str: *mut ::gchar) -> Strdup {
+    pub unsafe fn new(str: *mut ::gchar) -> Strdup {
         Strdup { str: str }
     }
 
-    fn get(&self) -> *::gchar {
+    /// Gets a pointer to the wrapped string.
+    ///
+    /// # Safety notes
+    /// This method is unsafe because it is possible to accidentally write code that destroys
+    /// the `Strdup` but keeps a dangling pointer to the string.
+    ///
+    /// See [with_ptr()](#fn.with_ptr) for a safer alternative.
+    pub unsafe fn get(&self) -> *::gchar {
         self.str as *::gchar
     }
 
-    fn mut_get(&mut self) -> *mut ::gchar {
+    /// Calls the given closure with a pointer to the wrapped string.
+    pub fn with_ptr<R>(&self, f: &fn(*::gchar) -> R) -> R {
+        f(self.str as *::gchar)
+    }
+
+    /// Gets a mutable pointer to the wrapped string.
+    ///
+    /// # Safety notes
+    /// This method is unsafe because it is possible to accidentally write code that destroys
+    /// the `Strdup` but keeps a dangling pointer to the string.
+    ///
+    /// See [with_mut_ptr()](#fn.with_mut_ptr) for a safer alternative.
+    pub unsafe fn mut_get(&mut self) -> *mut ::gchar {
         self.str
+    }
+
+    /// Calls the given closure with a mutable pointer to the wrapped string.
+    pub fn with_mut_ptr<R>(&mut self, f: &fn(*mut ::gchar) -> R) -> R {
+        f(self.str)
     }
 }
 
@@ -55,20 +80,33 @@ impl Strdupv {
     /// free each string up to the `NULL` terminator and free the array (all via g_strfreev())
     /// when destroyed.
     ///
+    /// # Safety notes
     /// This static method is unsafe because (1) the given array must have been allocated;
     /// (2) the given array must be `NULL`-terminated; (3) each string in the array up to
     /// the `NULL` terminator must have been allocated; and (4) it must be that only the
     /// `Strdupv` will free the array and each of the strings up to the `NULL` terminator.
-    unsafe fn new(str_array: *mut *mut ::gchar) -> Strdupv {
+    pub unsafe fn new(str_array: *mut *mut ::gchar) -> Strdupv {
         Strdupv { str_array: str_array }
     }
 
     /// Gets a mutable pointer to the wrapped array of strings.
     ///
+    /// # Safety notes
     /// This method is unsafe because it is possible to overwrite the `NULL` terminator,
-    /// which could cause a segfault when this `Strdupv` is destroyed.
-    unsafe fn mut_get(&mut self) -> *mut *mut ::gchar {
+    /// which could cause a segfault when this `Strdupv` is destroyed. Also, it is possible
+    /// to accidentally write code that destroys the `Strdupv` but keeps a dangling pointer
+    /// to the array or to one of the strings.
+    pub unsafe fn mut_get(&mut self) -> *mut *mut ::gchar {
         self.str_array
+    }
+
+    /// Calls the given closure with a mutable pointer to the wrapped string.
+    ///
+    /// # Safety notes
+    /// This method is unsafe because it is possible for the closure to overwrite the `NULL`
+    /// terminator, which could cause a segfault when this `Strdupv` is destroyed.
+    pub unsafe fn with_mut_ptr<R>(&mut self, f: &fn(*mut *mut ::gchar) -> R) -> R {
+        f(self.str_array)
     }
 }
 
@@ -83,17 +121,20 @@ impl Drop for Strdupv {
 
 /// Duplicates a nul-terminated string.
 ///
+/// # Safety notes
 /// This function is unsafe because the given string must be terminated with a nul character
-/// (`'\0'`) and each character through the nul terminator must be safe to access.
+/// (`'\0'`) and each character through the nul terminator must be safe to access or else
+/// a segfault may occur.
 pub unsafe fn strdup(str: *::gchar) -> Strdup {
     Strdup::new(::detail::strfuncs::g_strdup(str))
 }
 
 /// Duplicates a `NULL`-terminated array of nul-terminated strings.
 ///
+/// # Safety notes
 /// This function is unsafe because the given array of strings must be `NULL`-terminated
 /// and each string up to the `NULL` terminator must be terminated with a nul character
-/// (`'\0'`).
+/// (`'\0'`) or else a segfault may occur.
 pub unsafe fn strdupv(str_array: *mut *mut ::gchar) -> Strdupv {
     Strdupv::new(::detail::strfuncs::g_strdupv(str_array))
 }
