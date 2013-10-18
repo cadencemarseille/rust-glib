@@ -53,6 +53,7 @@ fn do_install(args: ~[~str]) {
     let src_path = workspace_path.push("src");
     let native_detail_src_path = src_path.push("glib").push("detail").push("native");
     let paths_to_substitute = [
+        native_detail_src_path.push("error.rs.in"),
         native_detail_src_path.push("mem.rs.in"),
         native_detail_src_path.push("strfuncs.rs.in"),
         native_detail_src_path.push("string.rs.in")

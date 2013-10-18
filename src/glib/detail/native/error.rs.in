@@ -6,9 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-pub mod error;
-pub mod mem;
-mod native;
-pub mod quark;
-pub mod strfuncs;
-pub mod string;
+#[link_args = "@GLIB_LIBS@"]
+extern {
+    pub fn g_error_copy(error: *::detail::error::GError) -> *mut ::detail::error::GError;
+    pub fn g_error_free(error: *mut ::detail::error::GError);
+}

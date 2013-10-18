@@ -6,9 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-pub mod error;
-pub mod mem;
-mod native;
-pub mod quark;
-pub mod strfuncs;
-pub mod string;
+pub struct GError {
+    domain: ::detail::quark::GQuark,
+    code: ::gint,
+    message: *mut ::gchar
+}
+
+pub unsafe fn g_error_free(error: *mut GError) {
+    #[fixed_stack_segment]; #[inline(never)];
+    ::detail::native::error::g_error_free(error)
+}

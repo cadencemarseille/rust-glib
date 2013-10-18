@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+pub mod error;
 pub mod mem;
 pub mod strfuncs;
 pub mod string;

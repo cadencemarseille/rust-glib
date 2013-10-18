@@ -14,6 +14,8 @@ use std::libc;
 pub use types::*;
 
 mod detail;
+pub mod error;
+pub mod quark;
 pub mod strfuncs;
 pub mod string;
 pub mod types;

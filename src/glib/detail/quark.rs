@@ -6,9 +6,4 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-pub mod error;
-pub mod mem;
-mod native;
-pub mod quark;
-pub mod strfuncs;
-pub mod string;
+pub type GQuark = ::guint32;
