@@ -20,8 +20,10 @@ impl Error {
     }
 
     pub fn message(&self) -> ~str {
-        assert!(ptr::is_not_null(self.ptr));
-        str::raw::from_c_str((*self.ptr).message as *::gchar)
+        unsafe {
+            assert!(ptr::is_not_null(self.ptr));
+            str::raw::from_c_str((*self.ptr).message as *::gchar)
+        }
     }
 }
 
@@ -29,7 +31,7 @@ impl Drop for Error {
     fn drop(&mut self) {
         unsafe {
             assert!(ptr::is_not_null(self.ptr));
-            ::detail::native::error::g_error_free(self.ptr);
+            ::detail::error::g_error_free(self.ptr);
             self.ptr = ptr::mut_null();
         }
     }
