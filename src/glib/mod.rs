@@ -11,6 +11,7 @@
 
 use std::libc;
 
+pub use error::Error;
 pub use types::*;
 
 pub mod detail;
